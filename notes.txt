@@ -1,0 +1,5 @@
+Create object for Bill
+
+Bills have Company Names, total amounts, monthly payments, due dates etc
+
+Program can read or modify csv or tsv file to start, perhaps querie database later on.
