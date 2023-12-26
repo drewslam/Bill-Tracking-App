@@ -24,6 +24,43 @@ Bill** Extend(Bill** bills, int numBills, int append) {
     return newArr;
 }
 
+Bill** importCSV(Bill** bills, int& count) {
+    ifstream inFS("export/export.csv");
+    Bill** newArr = nullptr;
+
+    if (inFS.is_open()) {
+        string line;
+        while (getline(inFS, line)) {
+            count++;
+        }
+        inFS.clear();
+        inFS.seekg(0, ios::beg);
+
+        newArr = new Bill*[count];
+        int index = 0;
+
+        while (getline(inFS, line)) {
+            istringstream inSS(line);
+            string name, debt, payment, date;
+            
+            if (getline(inSS, name, ',') &&
+                getline(inSS, debt, ',') &&
+                getline(inSS, payment, ',') &&
+                getline(inSS, date, ',')) {
+                
+                double debtVal = stod(debt);
+                double paymentVal = stod(payment);
+                int dateVal = stoi(date);
+
+                Bill* bill = new Bill(name, debtVal, paymentVal, dateVal);
+                newArr[index++] = bill;
+            }
+        }
+    }
+
+    return newArr;
+}
+
 int main() {
     string userName;
     string creditorName;
@@ -32,8 +69,6 @@ int main() {
     int dueDate;
     int numBills = 0;
     char userSelect = -1;
-    ifstream inFS;
-    istringstream inSS;
     ofstream outFS;
     Bill** billsDue = new Bill*;
 
@@ -43,7 +78,7 @@ int main() {
     PrintHeading(userName);
 
     // Checks to see if export.csv has been created and reads each value into the billsDue array
-    
+    billsDue = importCSV(billsDue, numBills);
     
     // Populate array of user-inputted bills
     while (userSelect != 'q' && userSelect != 'Q') {
@@ -95,7 +130,7 @@ int main() {
     for (int i = 0; i < numBills; i++) {
         delete billsDue[i];
     }
-    delete[] billsDue;
+    delete billsDue;
 
     return 0;
 }
