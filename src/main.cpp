@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -31,6 +32,9 @@ int main() {
     int dueDate;
     int numBills = 0;
     char userSelect = -1;
+    ifstream inFS;
+    istringstream inSS;
+    ofstream outFS;
     Bill** billsDue = new Bill*;
 
     cout << "Enter your first name: ";
@@ -38,30 +42,33 @@ int main() {
     
     PrintHeading(userName);
 
+    // Checks to see if export.csv has been created and reads each value into the billsDue array
+    
+    
     // Populate array of user-inputted bills
     while (userSelect != 'q' && userSelect != 'Q') {
-        Bill* hellaBill = new Bill;
+        Bill* tempBill = new Bill;
         numBills++;
 
         cout << "Creditor Name: ";
         cin.ignore();
         getline(cin, creditorName);
-        hellaBill->SetCreditorName(creditorName);
+        tempBill->SetCreditorName(creditorName);
 
         cout << "Total Balance: ";
         cin >> totalDue;
-        hellaBill->SetTotalDebt(totalDue);
+        tempBill->SetTotalDebt(totalDue);
 
         cout << "Monthly Payment: ";
         cin >> monthlyPayment;
-        hellaBill->SetMonthlyPayment(monthlyPayment);
+        tempBill->SetMonthlyPayment(monthlyPayment);
 
         cout << "Due Date (day of the month): ";
         cin >> dueDate;
-        hellaBill->SetDueDate(dueDate);
+        tempBill->SetDueDate(dueDate);
         
         billsDue = Extend(billsDue, numBills, 1);
-        billsDue[numBills - 1] = hellaBill;
+        billsDue[numBills - 1] = tempBill;
 
         cout << "Press any ascii value to add a bill, q to quit: ";
         cin >> userSelect;
@@ -75,6 +82,19 @@ int main() {
         cout << setw(26 + userName.size() + 34) << setfill('-') << "" << endl;
     }
 
+    // Write the values to an external csv document.
+    outFS.open("../export/export.csv");
+    for (int i = 0; i < numBills; i++) {
+        outFS << billsDue[i]->GetCreditorName() << ",";
+        outFS << billsDue[i]->GetTotalDebt() << ",";
+        outFS << billsDue[i]->GetMonthlyPayment() << ",";
+        outFS << billsDue[i]->GetDueDate() << "," << endl;
+    }
+    outFS.close();
+
+    for (int i = 0; i < numBills; i++) {
+        delete billsDue[i];
+    }
     delete[] billsDue;
 
     return 0;
