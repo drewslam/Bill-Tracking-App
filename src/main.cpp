@@ -4,7 +4,8 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include "Bill.h"
+#include "../include/Bill.h"
+#include "../include/LinkedList.h"
 
 using namespace std;
 
@@ -14,30 +15,12 @@ void PrintHeading(string name) {
     cout << setw(26) << setfill('*') << "" << endl;
 }
 
-Bill** Extend(Bill** bills, int numBills, int append) {
-    Bill** newArr = new Bill*[numBills + append];
-    
-    for (int i = 0; i < numBills; i++) {
-        newArr[i] = bills[i];
-    }
-
-    return newArr;
-}
-
-Bill** importCSV(Bill** bills, int& count) {
+LinkedList importCSV() {
     ifstream inFS("export/export.csv");
-    Bill** newArr = nullptr;
+    LinkedList billList;
 
     if (inFS.is_open()) {
         string line;
-        while (getline(inFS, line)) {
-            count++;
-        }
-        inFS.clear();
-        inFS.seekg(0, ios::beg);
-
-        newArr = new Bill*[count];
-        int index = 0;
 
         while (getline(inFS, line)) {
             istringstream inSS(line);
@@ -53,84 +36,69 @@ Bill** importCSV(Bill** bills, int& count) {
                 int dateVal = stoi(date);
 
                 Bill* bill = new Bill(name, debtVal, paymentVal, dateVal);
-                newArr[index++] = bill;
+                billList.append(bill);
             }
         }
+        inFS.close();
     }
 
-    return newArr;
+    return billList;
 }
 
-int main() {
-    string userName;
+Bill* createBillFromUserInput() {
     string creditorName;
     double totalDue;
     double monthlyPayment;
     int dueDate;
-    int numBills = 0;
+    
+
+    cout << "Creditor Name: ";
+    cin.ignore();
+    getline(cin, creditorName);
+
+    cout << "Total Balance: ";
+    cin >> totalDue;
+
+    cout << "Monthly Payment: ";
+    cin >> monthlyPayment;
+
+    cout << "Due Date (day of the month): ";
+    cin >> dueDate;
+
+    return new Bill(creditorName, totalDue, monthlyPayment, dueDate);
+}
+
+int main() {
+    string userName;
     char userSelect = -1;
     ofstream outFS;
-    Bill** billsDue = new Bill*;
+    LinkedList billsDue;
 
     cout << "Enter your first name: ";
     cin >> userName;
     
     PrintHeading(userName);
 
-    // Checks to see if export.csv has been created and reads each value into the billsDue array
-    billsDue = importCSV(billsDue, numBills);
+    // Checks to see if export.csv has been created and reads each value into the billsDue list
+    billsDue = importCSV();
     
-    // Populate array of user-inputted bills
+    // Populate linked list of user-inputted bills
     while (userSelect != 'q' && userSelect != 'Q') {
-        Bill* tempBill = new Bill;
-        numBills++;
-
-        cout << "Creditor Name: ";
-        cin.ignore();
-        getline(cin, creditorName);
-        tempBill->SetCreditorName(creditorName);
-
-        cout << "Total Balance: ";
-        cin >> totalDue;
-        tempBill->SetTotalDebt(totalDue);
-
-        cout << "Monthly Payment: ";
-        cin >> monthlyPayment;
-        tempBill->SetMonthlyPayment(monthlyPayment);
-
-        cout << "Due Date (day of the month): ";
-        cin >> dueDate;
-        tempBill->SetDueDate(dueDate);
-        
-        billsDue = Extend(billsDue, numBills, 1);
-        billsDue[numBills - 1] = tempBill;
-
+        LinkedListNode current;
+        Bill* tempBill = createBillFromUserInput();
+        current.data = tempBill;
+        billsDue.append(current.data);
+        current.data->Print();
         cout << "Press any ascii value to add a bill, q to quit: ";
         cin >> userSelect;
     }
 
     // Print out each value
     PrintHeading(userName);
-    for (int i = 0; i < numBills; i++) {
-        cout << setw(26 + userName.size() + 34) << setfill('-') << "" << endl;
-        billsDue[i]->Print();
-        cout << setw(26 + userName.size() + 34) << setfill('-') << "" << endl;
-    }
+    billsDue.Display();
 
     // Write the values to an external csv document.
     outFS.open("../export/export.csv");
-    for (int i = 0; i < numBills; i++) {
-        outFS << billsDue[i]->GetCreditorName() << ",";
-        outFS << billsDue[i]->GetTotalDebt() << ",";
-        outFS << billsDue[i]->GetMonthlyPayment() << ",";
-        outFS << billsDue[i]->GetDueDate() << "," << endl;
-    }
-    outFS.close();
-
-    for (int i = 0; i < numBills; i++) {
-        delete billsDue[i];
-    }
-    delete billsDue;
 
     return 0;
 }

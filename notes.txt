@@ -1,5 +1,5 @@
-Create object for Bill
+A simple bill tracker app that records items by Creditor Name, Total Amount Due, Monthly Payment, and Due Date during the month.
 
-Bills have Company Names, total amounts, monthly payments, due dates etc
+Originally planned on using dynamically allocated arrays but rewriting to use a linked list instead, as it is easier to delete a list node without having to reallocate the entire list.
 
-Program can read or modify csv or tsv file to start, perhaps querie database later on.
+Create a menu-driven app that displays the list of bills, adds, modifies, and deletes bills.

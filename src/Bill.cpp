@@ -1,5 +1,5 @@
 #include <sstream>
-#include "Bill.h"
+#include "../include/Bill.h"
 
 Bill::Bill() {
     this->creditorName = "none";
