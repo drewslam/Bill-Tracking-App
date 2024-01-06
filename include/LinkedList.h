@@ -7,6 +7,11 @@ class LinkedListNode {
     public:
         LinkedListNode(Bill* bill);
         LinkedListNode();
+        void SetData(Bill* bill);
+        Bill* GetData() const;
+        void SetNext(LinkedListNode* node);
+        LinkedListNode* GetNext() const;
+    private:
         Bill* data;
         LinkedListNode* next;
 };
@@ -14,7 +19,7 @@ class LinkedListNode {
 class LinkedList {
     public:
         LinkedList();
-        void append(Bill* bill);
+        void Append(LinkedListNode* node);
         void Display() const;
         ~LinkedList();
     private:

@@ -36,7 +36,8 @@ LinkedList importCSV() {
                 int dateVal = stoi(date);
 
                 Bill* bill = new Bill(name, debtVal, paymentVal, dateVal);
-                billList.append(bill);
+                LinkedListNode* newNode = new LinkedListNode(bill);
+                billList.Append(newNode);
             }
         }
         inFS.close();
@@ -84,11 +85,10 @@ int main() {
     
     // Populate linked list of user-inputted bills
     while (userSelect != 'q' && userSelect != 'Q') {
-        LinkedListNode current;
         Bill* tempBill = createBillFromUserInput();
-        current.data = tempBill;
-        billsDue.append(current.data);
-        current.data->Print();
+        LinkedListNode* current = new LinkedListNode(tempBill);
+        billsDue.Append(current);
+        // current->GetData()->Print();
         cout << "Press any ascii value to add a bill, q to quit: ";
         cin >> userSelect;
     }
