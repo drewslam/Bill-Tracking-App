@@ -88,7 +88,6 @@ int main() {
         Bill* tempBill = createBillFromUserInput();
         LinkedListNode* current = new LinkedListNode(tempBill);
         billsDue.Append(current);
-        // current->GetData()->Print();
         cout << "Press any ascii value to add a bill, q to quit: ";
         cin >> userSelect;
     }
