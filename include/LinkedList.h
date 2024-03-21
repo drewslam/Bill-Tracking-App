@@ -1,26 +1,17 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
+#include <fstream>
 #include "Bill.h"
-
-class LinkedListNode {
-    public:
-        LinkedListNode(Bill* bill);
-        LinkedListNode();
-        void SetData(Bill* bill);
-        Bill* GetData() const;
-        void SetNext(LinkedListNode* node);
-        LinkedListNode* GetNext() const;
-    private:
-        Bill* data;
-        LinkedListNode* next;
-};
+#include "LinkedListNode.h"
 
 class LinkedList {
     public:
         LinkedList();
         void Append(LinkedListNode* node);
-        void Display() const;
+        void RemoveAfter(LinkedListNode* node);
+        void DisplayList() const;
+        void PrintList(std::ofstream& outFS) const;
         ~LinkedList();
     private:
         LinkedListNode* head;

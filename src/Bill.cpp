@@ -1,4 +1,5 @@
 #include <sstream>
+#include <fstream>
 #include "../include/Bill.h"
 
 Bill::Bill() {
@@ -6,6 +7,10 @@ Bill::Bill() {
     this->totalDebt = 0.00;
     this->monthlyPayment = 0.00;
     this->dueDate = 0;
+}
+
+Bill::Bill(std::string name) {
+    this->creditorName = name;
 }
 
 Bill::Bill(std::string name, double totalDebt, double monthlyPayment, int day) {
@@ -49,9 +54,17 @@ std::string Bill::GetDueDate() const {
     return out.str();
 }
 
-void Bill::Print() const {
-    std::cout << "Creditor Name: " << GetCreditorName() << std::endl;
-    std::cout << "Remaining Balance: " << GetTotalDebt() << std::endl;
-    std::cout << "Monthly Payment: " << GetMonthlyPayment() << std::endl;
-    std::cout << "Due Date: " << GetDueDate() << std::endl;
+void Bill::Print() const { 
+    std::cout << "\nCreditor Name: " << GetCreditorName();
+    std::cout << "\nRemaining Balance: " << GetTotalDebt();
+    std::cout << "\nMonthly Payment: " << GetMonthlyPayment();
+    std::cout << "\nDue Date: " << GetDueDate() << std::endl;
 }
+
+void Bill::Print(std::ofstream& outFS) const {
+    outFS << GetCreditorName() << ",";
+    outFS << GetTotalDebt() << ",";
+    outFS << GetMonthlyPayment() << ",";
+    outFS << GetDueDate() << std::endl;
+}
+

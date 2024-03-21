@@ -3,3 +3,11 @@ A simple bill tracker app that records items by Creditor Name, Total Amount Due,
 Originally planned on using dynamically allocated arrays but rewriting to use a linked list instead, as it is easier to delete a list node without having to reallocate the entire list.
 
 Create a menu-driven app that displays the list of bills, adds, modifies, and deletes bills.
+
+1/6/24
+Fixed a persistent bug in which my LinkedList display function did not correctly display what should have been the full List.
+
+Next I would like to attack the challenge of outputting the contents of the list to a csv file.
+
+1/16/24
+I need to diagnose why my program isn't open export.csv. I would also like to create a database for default storage using PostgreSQL.

@@ -2,6 +2,7 @@
 #define BILL_H
 
 #include <iostream>
+#include <fstream>
 
 class Bill {
     private:
@@ -12,6 +13,7 @@ class Bill {
 
     public:
         Bill();
+        Bill(std::string name);
         Bill(std::string name, double totalDebt, double monthlyPayment, int day);
         void SetCreditorName(std::string name);
         void SetTotalDebt(double totalDebt);
@@ -22,6 +24,7 @@ class Bill {
         double GetMonthlyPayment() const;
         std::string GetDueDate() const;
         void Print() const;
+        void Print(std::ofstream& outFS) const;
 };
 
 #endif

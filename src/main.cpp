@@ -16,21 +16,29 @@ void PrintHeading(string name) {
 }
 
 LinkedList importCSV() {
-    ifstream inFS("export/export.csv");
+    ifstream inFS;
+    string name;
     LinkedList billList;
 
-    if (inFS.is_open()) {
+    cout << "Input a file name: " << endl;
+    cin.ignore();
+    getline(cin, name);
+    inFS.open(name);
+    
+    if (!inFS.is_open()) {
+        cout << "Error opening " << name << endl;
+    } else {
         string line;
 
         while (getline(inFS, line)) {
             istringstream inSS(line);
             string name, debt, payment, date;
-            
+
             if (getline(inSS, name, ',') &&
                 getline(inSS, debt, ',') &&
                 getline(inSS, payment, ',') &&
                 getline(inSS, date, ',')) {
-                
+
                 double debtVal = stod(debt);
                 double paymentVal = stod(payment);
                 int dateVal = stoi(date);
@@ -52,9 +60,8 @@ Bill* createBillFromUserInput() {
     double monthlyPayment;
     int dueDate;
     
-
-    cout << "Creditor Name: ";
     cin.ignore();
+    cout << "Creditor Name: ";
     getline(cin, creditorName);
 
     cout << "Total Balance: ";
@@ -72,17 +79,17 @@ Bill* createBillFromUserInput() {
 int main() {
     string userName;
     char userSelect = -1;
-    ofstream outFS;
+    ofstream outFS("../export/export.csv");
     LinkedList billsDue;
 
     cout << "Enter your first name: ";
     cin >> userName;
-    
-    PrintHeading(userName);
 
     // Checks to see if export.csv has been created and reads each value into the billsDue list
     billsDue = importCSV();
-    
+
+    PrintHeading(userName);
+
     // Populate linked list of user-inputted bills
     while (userSelect != 'q' && userSelect != 'Q') {
         Bill* tempBill = createBillFromUserInput();
@@ -94,10 +101,15 @@ int main() {
 
     // Print out each value
     PrintHeading(userName);
-    billsDue.Display();
+    billsDue.DisplayList();
 
     // Write the values to an external csv document.
-    outFS.open("../export/export.csv");
+    if (!outFS.is_open()) {
+        cout << "Error opening export.csv" << std::endl;
+        return 1;
+    }
+    billsDue.PrintList(outFS);    
+    outFS.close();
 
     return 0;
 }
