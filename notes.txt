@@ -11,3 +11,6 @@ Next I would like to attack the challenge of outputting the contents of the list
 
 1/16/24
 I need to diagnose why my program isn't open export.csv. I would also like to create a database for default storage using PostgreSQL.
+
+3/20/24
+Started process of converting list to doubly linked list to eventually add the ability to list each bill by due date.

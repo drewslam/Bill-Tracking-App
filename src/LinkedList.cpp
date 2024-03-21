@@ -43,7 +43,7 @@ void LinkedList::DisplayList() const {
 
 void LinkedList::PrintList(std::ofstream& outFS) const {
     LinkedListNode* current = this->head;
-    while (current) {
+    while (current != nullptr) {
         current->GetData()->Print(outFS);
         current = current->GetNext();
     }
